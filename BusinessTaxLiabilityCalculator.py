@@ -819,7 +819,6 @@ if __name__ == "__main__":
     if "--test" in sys.argv:
         print("✅ Script ran in test mode.")
     else:
-        SCENARIOS = [
         # Full run
         
         # Scenarios
