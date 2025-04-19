@@ -24,6 +24,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run the tax calculator
-        run: |
-          python BusinessTaxLiabilityCalculator.py
+      - name: Test script basic execution
+		run: python BusinessTaxLiabilityCalculator.py --test
