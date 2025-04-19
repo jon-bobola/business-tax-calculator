@@ -815,10 +815,11 @@ class BusinessScenarioAnalyzer:
 # For direct execution
 if __name__ == "__main__":
     import sys
+
     if "--test" in sys.argv:
-        print("Test mode OK")
-        exit(0)
+        print("✅ Script ran in test mode.")
     else:
+        SCENARIOS = [
         # Full run
         
         # Scenarios
