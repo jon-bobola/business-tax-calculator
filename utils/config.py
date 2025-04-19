@@ -35,8 +35,16 @@ TAX_RATES = {
 }
 
 # Self-employment tax rates
-SELF_EMPLOYMENT_TAX_RATE = 0.153  # 15.3% (12.4% Social Security + 2.9% Medicare)
+SOCIAL_SECURITY_TAX_RATE = 0.124  # 12.4% Social Security
+MEDICARE_TAX_RATE = 0.029  # 2.9% Medicare
+SELF_EMPLOYMENT_TAX_RATE = SOCIAL_SECURITY_TAX_RATE + MEDICARE_TAX_RATE  # 15.3% combined
 SOCIAL_SECURITY_WAGE_BASE = 168600  # For 2024
+SELF_EMPLOYMENT_TAX_DEDUCTION = 0.5  # Can deduct 50% of self-employment tax
+
+# QBI Deduction
+QBI_DEDUCTION_RATE = 0.20  # 20% Qualified Business Income Deduction
+QBI_INCOME_THRESHOLD_SINGLE = 182100  # Income threshold for QBI phase-out (Single)
+QBI_INCOME_THRESHOLD_JOINT = 364200  # Income threshold for QBI phase-out (Joint)
 
 # Standard deduction amounts
 STANDARD_DEDUCTION = {
@@ -57,3 +65,13 @@ HEALTH_INSURANCE_DEDUCTION_RATE = 1.0  # 100% deductible for self-employed
 
 # Home office deduction rate (per square foot)
 HOME_OFFICE_DEDUCTION_RATE = 5  # $5 per square foot, up to 300 square feet
+
+# Local income tax rates (estimated average by state)
+LOCAL_INCOME_TAX_RATE = 0.032  # 5% default rate - this would vary by location
+
+# Tax year
+TAX_YEAR = 2024
+
+# Application settings
+DEBUG_MODE = False  # Set to True to enable debug information
+VERSION = "1.2.0"   # Application version
