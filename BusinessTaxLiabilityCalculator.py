@@ -4,6 +4,9 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple, Any, Optional, Union, Set, TypeVar, Generic
 from dataclasses import dataclass
 import logging
+from tax_visualization import TaxVisualization
+from visualization_viewer import TaxVisualizationViewer
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -812,7 +815,8 @@ class BusinessScenarioAnalyzer:
             return pd.Series([None, None])
         self.df[[ResultKeys.LIABILITY_DIFFERENCE.value, ResultKeys.LIABILITY_PERCENT_DIFFERENCE.value]] = self.df.apply(calculate_difference, axis=1)
     
-# For direct execution
+
+# Then modify your main code block:
 if __name__ == "__main__":
     import sys
 
@@ -823,16 +827,24 @@ if __name__ == "__main__":
         
         # Scenarios
         SCENARIOS = [
-        {"gross_revenue": 100000, "expenses": 50000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
-        {"gross_revenue": 200000, "expenses": 100000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
-        {"gross_revenue": 300000, "expenses": 150000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
-        {"gross_revenue": 400000, "expenses": 200000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
-        {"gross_revenue": 500000, "expenses": 250000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
-        {"gross_revenue": 300000, "expenses": 150000, "salary": 150000, "entity_type": EntityType.S_CORP.value},
-        {"gross_revenue": 400000, "expenses": 200000, "salary": 150000, "entity_type": EntityType.S_CORP.value},
-        {"gross_revenue": 500000, "expenses": 250000, "salary": 150000, "entity_type": EntityType.S_CORP.value},
-    ]
+            {"gross_revenue": 100000, "expenses": 50000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
+            {"gross_revenue": 200000, "expenses": 100000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
+            {"gross_revenue": 300000, "expenses": 150000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
+            {"gross_revenue": 400000, "expenses": 200000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
+            {"gross_revenue": 500000, "expenses": 250000, "salary": 0, "entity_type": EntityType.SOLE_PROPRIETOR.value},
+            {"gross_revenue": 300000, "expenses": 150000, "salary": 150000, "entity_type": EntityType.S_CORP.value},
+            {"gross_revenue": 400000, "expenses": 200000, "salary": 150000, "entity_type": EntityType.S_CORP.value},
+            {"gross_revenue": 500000, "expenses": 250000, "salary": 150000, "entity_type": EntityType.S_CORP.value},
+        ]
         
         analyzer = BusinessScenarioAnalyzer(SCENARIOS)
         df = analyzer.run_analysis()
         print(df)
+        
+        # Check if GUI mode is enabled
+        if "--gui" in sys.argv:
+            # Launch interactive visualization viewer
+            viewer = TaxVisualizationViewer(df)
+            viewer.run()
+        else:
+            print("Run with --gui flag to view interactive visualizations")
