@@ -25,6 +25,5 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tax calculator in test mode
-		run: |
-			python BusinessTaxLiabilityCalculator.py --test
-
+        run: |
+          python BusinessTaxLiabilityCalculator.py --test
