@@ -17,7 +17,7 @@ def test_sole_proprietor_scenario():
         expenses=50000,
         salary=0,
         tax_deduction=TaxCalculatorFactory.create_tax_deduction(),
-        tax_liability=TaxCalculatorFactory.create_tax_liability()
+        liabilities=TaxCalculatorFactory.create_liabilities()
     )
     result = scenario.calculate()
     assert result[ResultKeys.ENTITY_TYPE.value] == EntityType.SOLE_PROPRIETOR.value
@@ -31,7 +31,7 @@ def test_scorp_scenario():
         expenses=100000,
         salary=80000,
         tax_deduction=TaxCalculatorFactory.create_tax_deduction(),
-        tax_liability=TaxCalculatorFactory.create_tax_liability()
+        liabilities=TaxCalculatorFactory.create_liabilities()
     )
     result = scenario.calculate()
     assert result[ResultKeys.ENTITY_TYPE.value] == EntityType.S_CORP.value

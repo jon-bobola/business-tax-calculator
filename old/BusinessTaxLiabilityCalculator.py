@@ -281,18 +281,18 @@ class TaxLiability:
         Returns:
             Total tax liability
         """
-        self.social_security_tax_liability.calculate(self_employment_income)
-        self.medicare_tax_liability.calculate(self_employment_income)
-        self.federal_income_tax_liability.calculate(taxable_income)
-        self.state_income_tax_liability.calculate(taxable_income)
-        self.local_tax_liability.calculate(taxable_income)
+        self.social_security_liabilities.calculate(self_employment_income)
+        self.medicare_liabilities.calculate(self_employment_income)
+        self.federal_income_liabilities.calculate(taxable_income)
+        self.state_income_liabilities.calculate(taxable_income)
+        self.local_liabilities.calculate(taxable_income)
         
         self.total_amount = (
-            self.social_security_tax_liability.amount +
-            self.medicare_tax_liability.amount +
-            self.federal_income_tax_liability.amount +
-            self.state_income_tax_liability.amount +
-            self.local_tax_liability.amount
+            self.social_security_liabilities.amount +
+            self.medicare_liabilities.amount +
+            self.federal_income_liabilities.amount +
+            self.state_income_liabilities.amount +
+            self.local_liabilities.amount
         )
         return self.total_amount
 # Deduction Classes
@@ -494,7 +494,7 @@ class TaxScenario(ITaxScenario):
         Returns:
             Total tax
         """
-        return self.tax_liability.calculate_total_tax(self_employment_income, taxable_income)
+        return self.liabilities.calculate_total_tax(self_employment_income, taxable_income)
         
     @abstractmethod
     def calculate(self) -> TaxResult:
@@ -555,8 +555,8 @@ class SoleProprietorTaxScenario(TaxScenario):
         """
         self.get_self_employment_income()
         
-        social_security_tax = self.tax_liability.social_security_tax_liability.calculate(self.self_employment_income)
-        medicare_tax = self.tax_liability.medicare_tax_liability.calculate(self.self_employment_income)
+        social_security_tax = self.liabilities.social_security_liabilities.calculate(self.self_employment_income)
+        medicare_tax = self.liabilities.medicare_liabilities.calculate(self.self_employment_income)
         
         self.get_qualified_business_income_base(social_security_tax, medicare_tax)
         
@@ -575,12 +575,12 @@ class SoleProprietorTaxScenario(TaxScenario):
             ResultKeys.MEDICARE_DEDUCTION.value: self.tax_deductions.medicare_deduction.amount,
             ResultKeys.QBI_DEDUCTION.value: self.tax_deductions.qualified_business_income_deduction.amount,
             ResultKeys.TAXABLE_PERSONAL_INCOME.value: self.taxable_income,
-            ResultKeys.SOCIAL_SECURITY_TAX.value: self.tax_liability.social_security_tax_liability.amount,
-            ResultKeys.MEDICARE_TAX.value: self.tax_liability.medicare_tax_liability.amount,
-            ResultKeys.FEDERAL_TAX.value: self.tax_liability.federal_income_tax_liability.amount,
-            ResultKeys.STATE_TAX.value: self.tax_liability.state_income_tax_liability.amount,
-            ResultKeys.LOCAL_TAX.value: self.tax_liability.local_tax_liability.amount,
-            ResultKeys.TOTAL_TAX.value: self.tax_liability.total_amount
+            ResultKeys.SOCIAL_SECURITY_TAX.value: self.liabilities.social_security_liabilities.amount,
+            ResultKeys.MEDICARE_TAX.value: self.liabilities.medicare_liabilities.amount,
+            ResultKeys.FEDERAL_TAX.value: self.liabilities.federal_income_liabilities.amount,
+            ResultKeys.STATE_TAX.value: self.liabilities.state_income_liabilities.amount,
+            ResultKeys.LOCAL_TAX.value: self.liabilities.local_liabilities.amount,
+            ResultKeys.TOTAL_TAX.value: self.liabilities.total_amount
         }
 class SCorpTaxScenario(TaxScenario):
     """Tax scenario for S Corporation entities"""
@@ -638,8 +638,8 @@ class SCorpTaxScenario(TaxScenario):
         """
         self.get_self_employment_income()
         
-        social_security_tax = self.tax_liability.social_security_tax_liability.calculate(self.self_employment_income)
-        medicare_tax = self.tax_liability.medicare_tax_liability.calculate(self.self_employment_income)
+        social_security_tax = self.liabilities.social_security_liabilities.calculate(self.self_employment_income)
+        medicare_tax = self.liabilities.medicare_liabilities.calculate(self.self_employment_income)
         
         qualified_business_income_base = self.get_qualified_business_income_base()
         
@@ -658,12 +658,12 @@ class SCorpTaxScenario(TaxScenario):
             ResultKeys.MEDICARE_DEDUCTION.value: self.tax_deductions.medicare_deduction.amount,
             ResultKeys.QBI_DEDUCTION.value: self.tax_deductions.qualified_business_income_deduction.amount,
             ResultKeys.TAXABLE_PERSONAL_INCOME.value: self.taxable_income,
-            ResultKeys.SOCIAL_SECURITY_TAX.value: self.tax_liability.social_security_tax_liability.amount,
-            ResultKeys.MEDICARE_TAX.value: self.tax_liability.medicare_tax_liability.amount,
-            ResultKeys.FEDERAL_TAX.value: self.tax_liability.federal_income_tax_liability.amount,
-            ResultKeys.STATE_TAX.value: self.tax_liability.state_income_tax_liability.amount,
-            ResultKeys.LOCAL_TAX.value: self.tax_liability.local_tax_liability.amount,
-            ResultKeys.TOTAL_TAX.value: self.tax_liability.total_amount
+            ResultKeys.SOCIAL_SECURITY_TAX.value: self.liabilities.social_security_liabilities.amount,
+            ResultKeys.MEDICARE_TAX.value: self.liabilities.medicare_liabilities.amount,
+            ResultKeys.FEDERAL_TAX.value: self.liabilities.federal_income_liabilities.amount,
+            ResultKeys.STATE_TAX.value: self.liabilities.state_income_liabilities.amount,
+            ResultKeys.LOCAL_TAX.value: self.liabilities.local_liabilities.amount,
+            ResultKeys.TOTAL_TAX.value: self.liabilities.total_amount
         }
 # Tax Calculator Factory
 class TaxCalculatorFactory:
