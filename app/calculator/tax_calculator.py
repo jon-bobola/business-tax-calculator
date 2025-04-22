@@ -2,8 +2,7 @@ from app.model.business import Business
 
 from app.calculator.deduction_calculator import (
     calculate_total_deductions,
-    calculate_qbi_deduction,
-    get_deduction_breakdown,
+    calculate_qbi_deduction
 )
 
 from app.calculator.income_calculator import (
@@ -191,7 +190,7 @@ class BusinessTaxCalculator:
             self.business, self.business.get_net_income()
         )
         # 2. Total deductions
-        total_deductions, deduction_breakdown = calculate_total_deductions(self.business)
+        total_deductions = calculate_total_deductions(self.business)
         
         # 3. Taxable income before QBI
         prelim_taxable = calculate_taxable_income(
@@ -212,7 +211,7 @@ class BusinessTaxCalculator:
         # 7. Final SE tax
         # 8. State income tax
         # 9. Local income tax
-        tax_liability.calculate(self.business.filing_status, taxable_income)
+        tax_liability.calculate(taxable_income)
 
         # 10. Total tax liability
         total_tax = tax_liability.value
@@ -229,17 +228,16 @@ class BusinessTaxCalculator:
         return {
             'business': self.business,
             'taxable_income': taxable_income,
-            'income_tax': tax_liability.income_tax,
-            'self_employment_tax': tax_liability.self_employment_tax,
-            'social_security_tax': tax_liability.social_security_income_tax_liability,
-            'medicare_tax': tax_liability.medicare_income_tax_liability,
-            'state_tax': tax_liability.state_income_tax_liability,
-            'local_tax': tax_liability.local_income_tax_liability,
+            'income_tax': tax_liability.income_tax(),
+            'self_employment_tax': tax_liability.self_employment_tax(),
+            'social_security_tax': tax_liability.social_security_income_tax_liability.value,
+            'medicare_tax': tax_liability.medicare_income_tax_liability.value,
+            'state_tax': tax_liability.state_income_tax_liability.value,
+            'local_tax': tax_liability.local_income_tax_liability.value,
             'total_tax': total_tax,
             'estimated_payments': getattr(self.business, 'estimated_tax_payments', 0),
             'tax_owed': tax_owed,
             'total_deductions': total_deductions,
-            'deduction_breakdown': deduction_breakdown,
             'qbi_deduction': qbi_deduction,
             'profit_distributions': profit_dist,
             'effective_tax_rate': effective_rate,
@@ -265,8 +263,6 @@ class BusinessTaxCalculator:
         if results['qbi_deduction'] > 0:
             print(f"Qualified Business Income Deduction: {format_currency(results['qbi_deduction'])}")
         print(f"Taxable Income: {format_currency(results['taxable_income'])}")
-
-        print("\n" + get_deduction_breakdown(results['deduction_breakdown']))
 
         print("\nTAX BREAKDOWN")
         print(f"Federal Income Tax: {format_currency(results['income_tax'])}")

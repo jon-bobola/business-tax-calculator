@@ -1,6 +1,6 @@
 from app.model.business import Business
-from app.model.deduction.deduction_constants import DeductionName
-from typing import Dict
+from app.model.deduction.base_deduction import BaseDeduction
+from typing import List
 
 """
 Deduction calculator module for total and categorized deductions.
@@ -10,14 +10,15 @@ def calculate_total_deductions(business: Business) -> float:
     """
     Calculates the total deductions including SE tax adjustments and other business deductions.
     """
-    '''
-    deductions: Dict[DeductionName, float] = business.tax_return.deduction_registry.get_available_deductions()
-    
-    for value in deductions.values():
-        total += value
-    
+    total = 0.0
+
+    deductions: List[BaseDeduction] = business.tax_return.deduction_registry.get_available_deductions()
+
+    for deduction in deductions:
+        total += deduction.value
+
     return total
-    '''
+    
 def calculate_qbi_deduction(business, taxable_income, filing_status):
     """
     Computes the Qualified Business Income deduction (20% of qualified income), with income thresholds.

@@ -28,12 +28,15 @@ class TaxLiability(Liability):
         
         return self.value
     
-    @property
     def income_tax(self) -> float:
-        self.income_tax = self.federal_income_tax_liability.value + self.state_income_tax_liability.value + self.local_income_tax_liability.value
-        return self.income_tax
-    
-    @property
+        return (
+            self.federal_income_tax_liability.value +
+            self.state_income_tax_liability.value +
+            self.local_income_tax_liability.value
+        )
+
     def self_employment_tax(self) -> float:
-        self.self_employment_tax = self.medicare_income_tax_liability.value + self.social_security_income_tax_liability.value
-        return self.self_employment_tax
+        return (
+            self.medicare_income_tax_liability.value +
+            self.social_security_income_tax_liability.value
+        )

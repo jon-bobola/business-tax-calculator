@@ -7,3 +7,7 @@ class BusinessExpensesDeduction(BaseDeduction):
     @classproperty
     def name(cls) -> DeductionName:
         return DeductionName.BUSINESS_EXPENSES_DEDUCTION
+    
+    @property
+    def value(self) -> float:
+        return 0.0  # Replace with actual calculation logic
