@@ -3,16 +3,53 @@ name = "business-tax-calculator"
 version = "0.1.0"
 description = "A tool for calculating business taxes"
 
-[project.dependencies]
-pandas = "^1.2"
-numpy = "^1.19"
+dependencies = [
+  "pandas>=1.5",
+  "numpy>=1.24"
+]
+[project.optional-dependencies]
+ui  = ["streamlit>=1.20.0"]   # install with: pip install .[ui]
+
+# install with: pip install .[dev]
+dev = [
+  "pytest>=7.0,<8.0",        # your test runner
+  "coverage>=6.5,<7.0",      # test coverage reporting
+  "black>=23.1.0,<24.0",     # code formatter
+  "flake8>=5.0,<6.0",        # linting
+  "isort>=5.0,<6.0",         # import sorting (works with Black)
+  "mypy>=1.0,<2.0"           # static type checking
+]
 
 [project.scripts]
 business-tax-calc = "business_tax_calculator.run:main"
-
-[tool.setuptools.packages.find]
-where = ["src"]
+business-tax-ui  = "streamlit_app:main"  # If you wrap launch logic in a main()
 
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+# ——— Tool configurations ———
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "--maxfail=1 --disable-warnings -q"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["business_tax_calculator"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true

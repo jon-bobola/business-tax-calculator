@@ -1,0 +1,8 @@
+- uses: actions/checkout@v3
+- uses: actions/setup-python@v4
+  with: python-version: '3.10'
+- run: pip install .[streamlit]   # install core + UI deps
+- run: pytest --maxfail=1 -q
+- run: black --check .
+- run: flake8 src tests
+- run: mypy src
