@@ -1,4 +1,0 @@
-pandas
-pytest
-seaborn
-matplotlib
