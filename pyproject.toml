@@ -8,7 +8,10 @@ dependencies = [
   "numpy>=1.24"
 ]
 [project.optional-dependencies]
-ui  = ["streamlit>=1.20.0"]   # install with: pip install .[ui]
+ui  = [
+  "streamlit>=1.20.0",   # install with: pip install .[ui]
+  "karina-input-ccy @ git+https://github.com/kanalive/streamlit_component_input_ccy.git#egg=karina-input-ccy"
+]
 
 # install with: pip install .[dev]
 dev = [
