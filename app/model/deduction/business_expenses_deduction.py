@@ -1,18 +1,9 @@
-from app.model.deduction.deduction import Deduction
+from app.model.deduction.base_deduction import BaseDeduction
+from app.model.deduction.deduction_constants import DeductionName
+from app.utils.decorators import classproperty
 
+class BusinessExpensesDeduction(BaseDeduction):
 
-from typing import Any
-
-
-class BusinessExpensesDeduction(Deduction):
-    """Standard business expenses deduction."""
-
-    def get_name(self) -> str:
-        return "expenses"
-
-    def is_applicable(self, business: Any, filing_status: str) -> bool:
-        # Business expenses are always applicable
-        return True
-
-    def calculate(self, business: Any, filing_status: str, **kwargs) -> float:
-        return business.expenses
+    @classproperty
+    def name(cls) -> DeductionName:
+        return DeductionName.BUSINESS_EXPENSES_DEDUCTION

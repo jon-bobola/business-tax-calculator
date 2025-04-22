@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 from app.utils.constants import MarginalTaxBrackets
 from app.model.liabilities.liability import Liability
-from app.model.filing_status.filing_status import FilingStatus
 
 @dataclass
 class FederalIncomeTaxLiability(Liability):
     """
     Calculate federal income tax based on income using marginal tax brackets.
     """
-    def calculate(self, filing_status: FilingStatus, taxable_income: float) -> float:
+    def calculate(self, taxable_income: float) -> float:
         """
         Calculate federal income tax based on taxable income.
         :param income: The taxable income

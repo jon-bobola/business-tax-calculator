@@ -1,19 +1,11 @@
-from app.model.deduction import Deduction
-
-
+from app.model.deduction.base_deduction import BaseDeduction
+from app.model.deduction.deduction_constants import DeductionName
+from app.utils.decorators import classproperty
 from typing import Any
 
 
-class SelfEmploymentTaxDeduction(Deduction):
-    """Self-employment tax deduction (50% of SE tax)."""
+class SelfEmploymentTaxDeduction(BaseDeduction):
 
-    def get_name(self) -> str:
-        return "se_tax_deduction"
-
-    def is_applicable(self, business: Any, filing_status: str) -> bool:
-        # Applies to pass-through entities (not C-Corps)
-        return business.entity_type in ["Sole Proprietorship", "LLC", "S-Corp"]
-
-    def calculate(self, business: Any, filing_status: str, **kwargs) -> float:
-        se_tax = kwargs.get('se_tax', 0)
-        return round(se_tax * 0.50, 2)
+    @classproperty
+    def name(cls) -> DeductionName:
+        return DeductionName.SELF_EMPLOYMENT_TAX_DEDUCTION

@@ -1,11 +1,10 @@
+'''
 from enum import Enum
 import pandas as pd
 from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple, Any, Optional, Union, Set, TypeVar, Generic
 from dataclasses import dataclass
 import logging
-from tax_visualization import TaxVisualization
-from visualization_viewer import TaxVisualizationViewer
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -60,63 +59,48 @@ BracketType = List[Tuple[float, float]]
 TaxResult = Dict[str, Any]
 # Interfaces for Dependency Injection
 class ITaxBracketCalculator(ABC):
-    """Interface for tax bracket calculators"""
+    # Interface for tax bracket calculators
     @abstractmethod
     def calculate_tax(self, income: float) -> float:
-        """Calculate tax based on income and defined brackets"""
+        # Calculate tax based on income and defined brackets
         pass
 class ITaxLiability(ABC):
-    """Interface for tax liability calculators"""
+    # Interface for tax liability calculators
     @abstractmethod
     def calculate(self, income: float) -> float:
-        """Calculate tax liability based on income"""
+        # Calculate tax liability based on income# 
         pass
     
     @property
     @abstractmethod
     def amount(self) -> float:
-        """Get the calculated amount"""
+        # Get the calculated amount
         pass
 class IDeduction(ABC):
-    """Interface for deduction calculators"""
+    # Interface for deduction calculators
     @abstractmethod
     def calculate(self, base_amount: float) -> float:
-        """Calculate deduction based on base amount"""
+        # Calculate deduction based on base amount
         pass
     
     @property
     @abstractmethod
     def amount(self) -> float:
-        """Get the calculated amount"""
+        # Get the calculated amount
         pass
 class ITaxScenario(ABC):
-    """Interface for tax scenarios"""
+
     @abstractmethod
     def calculate(self) -> TaxResult:
-        """Calculate tax scenario and return results"""
+
         pass
 # Implementation Classes
 class TaxBracket(ITaxBracketCalculator):
-    """Calculate tax based on marginal tax brackets"""
+
     def __init__(self, brackets: BracketType):
-        """
-        Initialize with brackets.
-        
-        Args:
-            brackets: List of tuples with (income_threshold, rate)
-        """
         self.brackets = brackets
         self.amount = 0
     def calculate_tax(self, income: float) -> float:
-        """
-        Calculate tax based on marginal brackets.
-        
-        Args:
-            income: Taxable income
-            
-        Returns:
-            Total tax calculated
-        """
         tax = 0
         prev_limit = 0
         for limit, rate in self.brackets:
@@ -129,20 +113,12 @@ class TaxBracket(ITaxBracketCalculator):
         return tax
 # Tax Liability Classes
 class SocialSecurityTaxLiability(ITaxLiability):
-    """Calculate Social Security tax liability"""
+    
     def __init__(self):
         self._amount = 0
         
     def calculate(self, self_employment_income: float) -> float:
-        """
-        Calculate Social Security tax based on income.
-        
-        Args:
-            self_employment_income: Self-employment or salary income
-            
-        Returns:
-            Calculated Social Security tax
-        """
+      
         self._amount = min(self_employment_income, Threshold.SOCIAL_SECURITY_INCOME_THRESHOLD.value) * TaxRates.SOCIAL_SECURITY_TAX_RATE.value
         return self._amount
     
@@ -150,20 +126,12 @@ class SocialSecurityTaxLiability(ITaxLiability):
     def amount(self) -> float:
         return self._amount
 class MedicareTaxLiability(ITaxLiability):
-    """Calculate Medicare tax liability, including additional Medicare tax"""
+    
     def __init__(self):
         self._amount = 0
         
     def calculate(self, self_employment_income: float) -> float:
-        """
-        Calculate Medicare tax including additional Medicare tax if applicable.
         
-        Args:
-            self_employment_income: Self-employment or salary income
-            
-        Returns:
-            Total Medicare tax
-        """
         medicare_tax = self_employment_income * TaxRates.MEDICARE_TAX_RATE.value
         additional_medicare_tax = max(self_employment_income - Threshold.ADDITIONAL_MEDICARE_INCOME_THRESHOLD.value, 0) * TaxRates.ADDITIONAL_MEDICARE_TAX_RATE.value
         self._amount = medicare_tax + additional_medicare_tax
@@ -173,26 +141,13 @@ class MedicareTaxLiability(ITaxLiability):
     def amount(self) -> float:
         return self._amount
 class FederalIncomeTaxLiability(ITaxLiability):
-    """Calculate Federal income tax liability"""
+ 
     def __init__(self, tax_bracket_calculator: ITaxBracketCalculator):
-        """
-        Initialize with tax bracket calculator.
-        
-        Args:
-            tax_bracket_calculator: Calculator for federal tax brackets
-        """
+       
         self.tax_bracket_calculator = tax_bracket_calculator
         self._amount = 0
     def calculate(self, taxable_income: float) -> float:
-        """
-        Calculate Federal income tax.
-        
-        Args:
-            taxable_income: Taxable income after deductions
-            
-        Returns:
-            Federal income tax
-        """
+       
         self._amount = self.tax_bracket_calculator.calculate_tax(taxable_income)
         return self._amount
     
@@ -200,26 +155,13 @@ class FederalIncomeTaxLiability(ITaxLiability):
     def amount(self) -> float:
         return self._amount
 class StateIncomeTaxLiability(ITaxLiability):
-    """Calculate State income tax liability"""
+    
     def __init__(self, tax_bracket_calculator: ITaxBracketCalculator):
-        """
-        Initialize with tax bracket calculator.
-        
-        Args:
-            tax_bracket_calculator: Calculator for state tax brackets
-        """
+       
         self.tax_bracket_calculator = tax_bracket_calculator
         self._amount = 0
     def calculate(self, taxable_income: float) -> float:
-        """
-        Calculate State income tax.
-        
-        Args:
-            taxable_income: Taxable income after deductions
-            
-        Returns:
-            State income tax
-        """
+       
         self._amount = self.tax_bracket_calculator.calculate_tax(taxable_income)
         return self._amount
     
@@ -227,20 +169,12 @@ class StateIncomeTaxLiability(ITaxLiability):
     def amount(self) -> float:
         return self._amount
 class LocalTaxLiability(ITaxLiability):
-    """Calculate local tax liability"""
+ 
     def __init__(self):
         self._amount = 0
         
     def calculate(self, taxable_income: float) -> float:
-        """
-        Calculate local tax.
         
-        Args:
-            taxable_income: Taxable income after deductions
-            
-        Returns:
-            Local tax
-        """
         self._amount = taxable_income * TaxRates.LOCAL_TAX_RATE.value
         return self._amount
     
@@ -249,14 +183,12 @@ class LocalTaxLiability(ITaxLiability):
         return self._amount
 @dataclass
 class TaxLiabilityDependencies:
-    """Dependencies for TaxLiability class"""
     social_security_tax: ITaxLiability
     medicare_tax: ITaxLiability
     federal_income_tax: ITaxLiability
     state_income_tax: ITaxLiability
     local_tax: ITaxLiability
 class TaxLiability:
-    """Aggregate tax liability calculator"""
     def __init__(self, dependencies: TaxLiabilityDependencies):
         """
         Initialize with tax liability calculators.
@@ -264,8 +196,8 @@ class TaxLiability:
         Args:
             dependencies: Various tax liability calculators
         """
-        self.social_security_tax_liability = dependencies.social_security_tax
-        self.medicare_tax_liability = dependencies.medicare_tax
+        self.social_security_income_tax_liability = dependencies.social_security_tax
+        self.medicare_income_tax_liability = dependencies.medicare_tax
         self.federal_income_tax_liability = dependencies.federal_income_tax
         self.state_income_tax_liability = dependencies.state_income_tax
         self.local_tax_liability = dependencies.local_tax
@@ -840,11 +772,4 @@ if __name__ == "__main__":
         analyzer = BusinessScenarioAnalyzer(SCENARIOS)
         df = analyzer.run_analysis()
         print(df)
-        
-        # Check if GUI mode is enabled
-        if "--gui" in sys.argv:
-            # Launch interactive visualization viewer
-            viewer = TaxVisualizationViewer(df)
-            viewer.run()
-        else:
-            print("Run with --gui flag to view interactive visualizations")
+'''

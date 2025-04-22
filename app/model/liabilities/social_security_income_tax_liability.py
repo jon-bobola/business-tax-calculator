@@ -1,12 +1,11 @@
 from dataclasses import dataclass
 from app.model.liabilities.liability import Liability
-from app.model.filing_status.filing_status import FilingStatus
 
 @dataclass
 class SocialSecurityIncomeTaxLiability(Liability):
     rate: float = 0.124  # Social Security tax rate (12.4%)
 
-    def calculate(self, filing_status: FilingStatus, taxable_income: float) -> float:
+    def calculate(self, taxable_income: float) -> float:
         """
         Calculate Social Security tax based on income.
         :param income: The income subject to Social Security tax

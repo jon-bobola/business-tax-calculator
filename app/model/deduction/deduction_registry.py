@@ -1,20 +1,18 @@
+from app.model.deduction.base_deduction import BaseDeduction
 from app.model.deduction.business_expenses_deduction import BusinessExpensesDeduction
-from app.model.deduction.deduction import Deduction
+from app.model.deduction.self_employment_tax_deduction import SelfEmploymentTaxDeduction
 from app.model.deduction.health_insurance_deduction import HealthInsuranceDeduction
+from app.model.deduction.retirement_contribution_deduction import RetirementContributionDeduction
 from app.model.deduction.home_office_deduction import HomeOfficeDeduction
 from app.model.deduction.other_deduction import OtherDeduction
-from app.model.deduction.retirement_contribution_deduction import RetirementContributionDeduction
-from app.model.deduction.self_employment_tax_deduction import SelfEmploymentTaxDeduction
-
-
-from typing import Any, Dict, List
-
+from app.model.deduction.deduction_constants import DeductionName
+from typing import List
 
 class DeductionRegistry:
     """Registry that manages available deduction types."""
 
     def __init__(self):
-        self._deductions: List[Deduction] = []
+        self._deductions: List[BaseDeduction] = []
         self._register_default_deductions()
 
     def _register_default_deductions(self):
@@ -26,26 +24,16 @@ class DeductionRegistry:
         self.register(HomeOfficeDeduction())
         self.register(OtherDeduction())
 
-    def register(self, deduction: Deduction):
+    def register(self, deduction: BaseDeduction):
         """Register a new deduction type."""
         self._deductions.append(deduction)
 
-    def get_available_deductions(self, business: Any, filing_status: str, **kwargs) -> Dict[str, float]:
-        """
-        Calculate all applicable deductions for the given business and filing status.
-
-        Args:
-            business: The business entity
-            filing_status: Tax filing status
-            kwargs: Additional parameters needed for calculation
-
-        Returns:
-            Dict[str, float]: Dictionary mapping deduction names to amounts
-        """
-        result = {}
+    def get_available_deductions(self) -> List[BaseDeduction]:
+        return self._deductions
+    
+    def get_deduction_by_name(self, name: DeductionName) -> BaseDeduction:
+        """Get a deduction by its name."""
         for deduction in self._deductions:
-            if deduction.is_applicable(business, filing_status):
-                amount = deduction.calculate(business, filing_status, **kwargs)
-                if amount > 0:
-                    result[deduction.get_name()] = amount
-        return result
+            if deduction.name == name:
+                return deduction
+        raise ValueError(f"Deduction '{name}' not found in registry.")

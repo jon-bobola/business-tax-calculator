@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from app.model.liabilities.liability import Liability
-from app.model.filing_status.filing_status import FilingStatus
 
 @dataclass
 class MedicareIncomeTaxLiability(Liability):
@@ -8,7 +7,7 @@ class MedicareIncomeTaxLiability(Liability):
     additional_rate: float = 0.009  # Additional Medicare tax rate (0.9%) for income over $200,000
     threshold: float = 200000  # Threshold for additional Medicare tax
 
-    def calculate(self, filing_status: FilingStatus, taxable_income: float) -> float:
+    def calculate(self, taxable_income: float) -> float:
         """
         Calculate Medicare tax based on income.
         :param income: The income subject to Medicare tax

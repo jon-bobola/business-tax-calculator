@@ -1,18 +1,18 @@
 from app.model.business import Business
 
-from deduction_calculator import (
+from app.calculator.deduction_calculator import (
     calculate_total_deductions,
     calculate_qbi_deduction,
     get_deduction_breakdown,
 )
 
-from calculator.income_calculator import (
+from app.calculator.income_calculator import (
     calculate_taxable_income,
     calculate_self_employment_tax,
     calculate_effective_tax_rate,
 )
 
-from utils.helpers import (
+from app.utils.helpers import (
     validate_number_input,
     validate_yes_no_input,
     validate_entity_type,
@@ -180,11 +180,10 @@ class BusinessTaxCalculator:
         if has_est:
             self.business.set_estimated_tax_payments(validate_number_input(
                 "Estimated tax payment amount: $", 0
-            ))
+            )
+        )
 
     def calculate_liabilities(self):
-
-
 
         """Calculate tax liability based on collected information."""
         # 1. Preliminary SE tax for deduction
@@ -192,9 +191,8 @@ class BusinessTaxCalculator:
             self.business, self.business.get_net_income()
         )
         # 2. Total deductions
-        total_deductions, deduction_breakdown = calculate_total_deductions(
-            self.business, self.filing_status, prelim_se_tax
-        )
+        total_deductions, deduction_breakdown = calculate_total_deductions(self.business)
+        
         # 3. Taxable income before QBI
         prelim_taxable = calculate_taxable_income(
             self.business, total_deductions
@@ -233,8 +231,8 @@ class BusinessTaxCalculator:
             'taxable_income': taxable_income,
             'income_tax': tax_liability.income_tax,
             'self_employment_tax': tax_liability.self_employment_tax,
-            'social_security_tax': tax_liability.social_security_tax_liability,
-            'medicare_tax': tax_liability.medicare_tax_liability,
+            'social_security_tax': tax_liability.social_security_income_tax_liability,
+            'medicare_tax': tax_liability.medicare_income_tax_liability,
             'state_tax': tax_liability.state_income_tax_liability,
             'local_tax': tax_liability.local_income_tax_liability,
             'total_tax': total_tax,

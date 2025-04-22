@@ -1,17 +1,9 @@
-from app.model.deduction import Deduction
+from app.model.deduction.base_deduction import BaseDeduction
+from app.model.deduction.deduction_constants import DeductionName
+from app.utils.decorators import classproperty
 
+class HealthInsuranceDeduction(BaseDeduction):
 
-from typing import Any
-
-
-class HealthInsuranceDeduction(Deduction):
-    """Health insurance premium deduction."""
-
-    def get_name(self) -> str:
-        return "health_insurance"
-
-    def is_applicable(self, business: Any, filing_status: str) -> bool:
-        return hasattr(business, 'health_premiums') and business.health_premiums > 0
-
-    def calculate(self, business: Any, filing_status: str, **kwargs) -> float:
-        return business.health_premiums if hasattr(business, 'health_premiums') else 0
+    @classproperty
+    def name(cls) -> DeductionName:
+        return DeductionName.HEALTH_INSURANCE_DEDUCTION

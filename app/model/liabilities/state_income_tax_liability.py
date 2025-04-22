@@ -1,12 +1,11 @@
 from dataclasses import dataclass
 from app.utils.constants import MarginalTaxBrackets
 from app.model.liabilities.liability import Liability
-from app.model.filing_status.filing_status import FilingStatus
 
 @dataclass
 class StateIncomeTaxLiability(Liability):
 
-    def calculate(self, filing_status: FilingStatus, taxable_income: float) -> float:
+    def calculate(self, taxable_income: float) -> float:
         tax = 0.0
         brackets = MarginalTaxBrackets.STATE.value
 

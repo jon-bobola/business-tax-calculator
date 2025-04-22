@@ -1,5 +1,6 @@
+from typing import Dict
 from app.model.tax_return import TaxReturn
-
+from app.model.deduction.deduction_constants import DeductionName
 
 class Business:
     def __init__(self):
@@ -118,3 +119,6 @@ class Business:
     # Calculate net income (Revenue - Expenses)
     def get_net_income(self):
         return self.revenue - self.expenses
+
+    def get_deductions(self) -> Dict[DeductionName, float]:
+        return self.tax_return.deduction_registry.get_available_deductions(self, self.filing_status)

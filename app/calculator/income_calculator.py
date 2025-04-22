@@ -4,8 +4,8 @@ Income calculation module refactored to use tax_liabilities classes.
 """
 
 from app.model.liabilities.federal_income_tax_liability import FederalIncomeTaxLiability
-from app.model.liabilities.social_security_tax_liability import SocialSecurityIncomeTaxLiability
-from app.model.liabilities.medicare_tax_liability import MedicareIncomeTaxLiability
+from app.model.liabilities.social_security_income_tax_liability import SocialSecurityIncomeTaxLiability
+from app.model.liabilities.medicare_income_tax_liability import MedicareIncomeTaxLiability
 
 
 def calculate_taxable_income(business, total_deductions, qbi_deduction=0.0):
