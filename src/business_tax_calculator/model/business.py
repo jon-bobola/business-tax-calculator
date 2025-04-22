@@ -119,6 +119,15 @@ class Business:
     # Calculate net income (Revenue - Expenses)
     def get_net_income(self):
         return self.revenue - self.expenses
+    
+    def get_taxable_compensation(self) -> float:
+        """
+        Returns the portion of net income subject to self‑employment tax:
+        92.35% of net earnings, per IRS rules.
+        """
+        net = self.get_net_income()
+        return max(0.0, net * 0.9235)
+
 
     def get_deductions(self) -> Dict[DeductionName, float]:
         return self.tax_return.deduction_registry.get_available_deductions(self, self.filing_status)
