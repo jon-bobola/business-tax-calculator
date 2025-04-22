@@ -1,28 +1,26 @@
 # Compressed files and archives
-*.zip     # Standard ZIP archive
-*.tar     # Unix tarball archive
-*.tar.*   # Tarballs with compression extensions (e.g., .tar.gz, .tar.bz2, .tar.xz)
-*.tgz     # Compressed tarball (.tar.gz shorthand)
-*.gz      # Gzip compressed file
-*.rar     # RAR archive (proprietary format)
-*.7z      # 7-Zip archive
-*.xz      # XZ compressed file
-*.bz2     # Bzip2 compressed file
-*.lz      # Lzip compressed file
-*.lzma    # LZMA compressed file
-*.Z       # Unix compress format
-*.cab     # Cabinet file (Windows installer archive)
-*.ar      # Unix static library or Debian archive
-*.cpio    # Legacy Unix archive format
-*.ace     # ACE compressed file (rare)
-*.zst     # Zstandard compressed file (modern, fast compression)
-*.apk     # Android Package (ZIP-based archive for Android apps)
-*.xpi     # Mozilla extension package (ZIP-based)
-*.jar     # Java Archive (ZIP-based)
-*.war     # Web Application Archive (Java EE deployment, ZIP-based)
-*.ear     # Enterprise Application Archive (Java EE, ZIP-based)
-*.iso     # ISO disk image (used for optical discs)
-
+.zip     # Standard ZIP archive
+.tar     # Unix tarball archive
+.tgz     # Compressed tarball (.tar.gz shorthand)
+.gz      # Gzip compressed file
+.rar     # RAR archive (proprietary format)
+.7z      # 7-Zip archive
+.xz      # XZ compressed file
+.bz2     # Bzip2 compressed file
+.lz      # Lzip compressed file
+.lzma    # LZMA compressed file
+.Z       # Unix compress format
+.cab     # Cabinet file (Windows installer archive)
+.ar      # Unix static library or Debian archive
+.cpio    # Legacy Unix archive format
+.ace     # ACE compressed file (rare)
+.zst     # Zstandard compressed file (modern, fast compression)
+.apk     # Android Package (ZIP-based archive for Android apps)
+.xpi     # Mozilla extension package (ZIP-based)
+.jar     # Java Archive (ZIP-based)
+.war     # Web Application Archive (Java EE deployment, ZIP-based)
+.ear     # Enterprise Application Archive (Java EE, ZIP-based)
+.iso     # ISO disk image (used for optical discs)
 
 # Byte‑compiled / optimized / DLL files
 __pycache__/
